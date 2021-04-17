@@ -62,7 +62,7 @@ Next we use ``char *argv[] = {"rm", "-r", "/home/hilmythoriq/Modul2/petshop/apex
 **e. not understanding yet** </br>
 
 ### **Number 3**
-**A. we need to make a file directory every 40 seconds and make the name of the file is the same as the timestamp. **</br>
+**A. we need to make a file directory every 40 seconds and make the name of the file is the same as the timestamp**</br>
 
 
 For now, our group only manage to make the file in the directory using the exec.c from the modul 2 skeleton. And to name the file, first we need to struct the function, then we set the a place for the time and set the time count using ``localtime``. we use function ``strftime`` to change the date an time format. This solution isn’t really finished because we haven’t solve of how the program running for every 40 seconds
