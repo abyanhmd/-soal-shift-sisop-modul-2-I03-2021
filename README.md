@@ -53,9 +53,9 @@ int main() {
 }
     }
 ```
-we use ``char *argv[] = {"unzip", "pets", "-d","/home/hilmythoriq/Modul2/petshop",NULL}`` and ``execv("/bin/unzip", argv)`` to unzip the pets zip and put it in the petshop directory.</br>
+we use ``char *argv[] = {"unzip", "pets", "-d","/home/hilmythoriq/Modul2/petshop",NULL}`` and ``execv("/bin/unzip", argv)`` to unzip the pets zip and put it in the petshop directory. we use ``-d`` to unzip the file to the directory that we want</br>
 
-Next we use ``char *argv[] = {"rm", "-r", "/home/hilmythoriq/Modul2/petshop/apex_cheats","/home/hilmythoriq/Modul2/petshop/musics", "/home/hilmythoriq/Modul2/petshop/unimportant_files" ,NULL}`` and ``execv("/usr/bin/rm", argv)`` to remove all the unnecessary folder.</br>
+Next we use ``char *argv[] = {"rm", "-r", "/home/hilmythoriq/Modul2/petshop/apex_cheats","/home/hilmythoriq/Modul2/petshop/musics", "/home/hilmythoriq/Modul2/petshop/unimportant_files" ,NULL}`` and ``execv("/usr/bin/rm", argv)`` to remove all the unnecessary folder. we use ``-r`` to remove folder thats contain files</br>
 **b. not understanding yet**</br>
 **c. not understanding yet**</br>
 **d. not understanding yet**</br>
