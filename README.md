@@ -25,3 +25,41 @@ From what we think of, in order to change the name of the folder, we can use `mv
 execl("/usr/bin/mv", "mv", "MUSIK", "Musyik", NULL);
 ```
 The old name is MUSIK and the new name is Musyik.</br>
+
+### **NUMBER 2**
+**a. Extract zip files and remove all unnecessary folder**</br>
+First we need to have directory "/home/[user]/modul2/petshop" then we have to unzip the pets.zip then remove all unnecessary folder.
+```c
+#include <stdlib.h>
+#include <sys/types.h>
+#include <unistd.h>
+#include <wait.h>
+
+int main() {
+
+  pid_t child_id;
+  int status;
+
+  child_id = fork();
+  if (child_id == 0) {
+    
+    char *argv[] = {"unzip", "pets", "-d","/home/hilmythoriq/Modul2/petshop",NULL}; //unzip pets zip to directory
+    execv("/bin/unzip", argv); //run unzip
+  } else {
+    
+    while ((wait(&status)) > 0);
+    char *argv[] = {"rm", "-r", "/home/hilmythoriq/Modul2/petshop/apex_cheats","/home/hilmythoriq/Modul2/petshop/musics", "/home/hilmythoriq/Modul2/petshop/unimportant_files" ,NULL}; //remove unnecessary files
+    execv("/usr/bin/rm", argv); //run rm 
+}
+    }
+```
+we use ``char *argv[] = {"unzip", "pets", "-d","/home/hilmythoriq/Modul2/petshop",NULL}`` and ``execv("/bin/unzip", argv)`` to unzip the pets zip and put it in the petshop directory.</br>
+
+Next we use ``char *argv[] = {"rm", "-r", "/home/hilmythoriq/Modul2/petshop/apex_cheats","/home/hilmythoriq/Modul2/petshop/musics", "/home/hilmythoriq/Modul2/petshop/unimportant_files" ,NULL}`` and ``execv("/usr/bin/rm", argv)`` to remove all the unnecessary folder.</br>
+**b. not understanding yet**</br>
+**c. not understanding yet**</br>
+**d. not understanding yet**</br>
+**e. not understanding yet** </br>
+    
+	
+
