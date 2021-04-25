@@ -1,30 +1,85 @@
 ## Modul 2 - Group I03 
-</br>
 
 ### **Number 1**
-The problem number 1 is not completed actually. Here are the examplanation of what is already done.
-The problem ask to download files from the link that is provided and store them in a new directory called Musyik for mp3, Fylm for mp4, and Pyoto for jpg. </br>
-When the time is 6 hours before 22.22 WIB on 9 April, all of the folder that is already been unzipped need to be zipped named Lopyu_Stevany.zip and all of the folder need to be removed. </br>
+The problem asks us to download 3 zip files which contains video, photo, and music.
+Each type of the zip file should be extracted and the folder named as **Musyik** for *mp3*, **Fylm** for *mp4*, and **Pyoto** for *jpg*. When it's Stevany's birthday (9 April 2021 22.22 WIB), the folders that have been unzipped need to be zipped with the name **Lopyu_Stevany.zip**. But before that, we need to download, unzip, and move the files 6 hours before her birthday.
 
-We are using fork for this problem but it is not running as it should be. For the download,
+We store all the links, zip names, folder names in variables.
 ```c
-char *URL[] = {"wget", "--no-check-certificate", "https://drive.google.com/uc?id=1ZG8nRBRPquhYXq_sISdsVcXx5VdEgi-J&export=download", "/home/Sisop/Modul_2", "-q", NULL};
-execv("/usr/bin/wget", URL);
+char *URL[] = {"https://drive.google.com/uc?id=1FsrAzb9B5ixooGUs0dGiBr-rC7TS9wTD&export=download",
+                "https://drive.google.com/uc?id=1ZG8nRBRPquhYXq_sISdsVcXx5VdEgi-J&export=download", 
+                "https://drive.google.com/uc?id=1ktjGgDkL0nNpY-vT7rT7O6ZI47Ke9xcp&export=download"};
+char *zipName[] = {"Foto_for_Stevany.zip", "Musik_for_Stevany.zip", "Film_for_Stevany.zip"};
+char *oldName[] = {"FOTO", "MUSIK", "FILM"};
+char *newName[] = {"Pyoto", "Musyik", "Fylm"};
 ```
-The command to download the file is `wget` and make sure there is no certificate checking using `--no-check-certificate`. The third argument is the url of the file, the fourth argument is the path of the download, the fifth argument is `-q` to hide the download log that is happening in the terminal. After that, we need to execute the command using `execv`. </br>
 
-The next step is to unzip the zip file.
+We use daemon for this problem so the `exec` command can run more than once. First, we use `wget` command inside a loop to download the files iteratively.
 ```c
-char *extract[] = {"unzip", "-q", "uc?id=1ZG8nRBRPquhYXq_sISdsVcXx5VdEgi-J&export=download", NULL};
-execv("/usr/bin/unzip", extract);
+for(int i = 0; i < 3; i++) {
+    char *argv[] = {"wget", "-q", "--no-check-certificate", URL[i], "-O", zipName[i], NULL};
+    if((child_id = fork()) == 0)
+        execv("/usr/bin/wget", argv);
+    while((wait(&status)) > 0);
+}
 ```
-The format is the same and the difference is only the command that is used which is `unzip`. </br>
+First, we store the terminal command inside `char` data type and execute it using `execv`. The option `-q` is used to make the terminal quiet and not to print all the log message.
+The option `--no-check-certificate` is used to make the program run without checking the file's certificate.
+The option `-O` is used to store all the downloaded file to the `zipName` variable. The `if` condition is used to make sure it is child process.
+And the last is `wait` command to make sure the program runs one by one.
 
-From what we think of, in order to change the name of the folder, we can use `mv` command to its folder plus the new name.
+After that, we need to unzip all the downloaded file using unzip command.
 ```c
-execl("/usr/bin/mv", "mv", "MUSIK", "Musyik", NULL);
+for(int j = 0; j < 3; j++) {
+    char *argv[] = {"unzip", "-qq", zipName[j], NULL};
+    if((child_id = fork()) == 0)
+        execv("/usr/bin/unzip", argv);
+    while((wait(&status)) > 0);
+}
 ```
-The old name is MUSIK and the new name is Musyik.</br>
+The format of this loop is not really different with the previous loop. The difference is only the parameter of the `argv`. The option `-qq` is to make the program run more quietly and not to print the log messages in the output. The `zipName` is the variable that is going to be unzipped.
+
+In order to rename the folder, we can use `mv` command to move the folder to its directory following the new folder name to rename the folder name.
+```c
+for(int k = 0; k < 3; k++) {
+    char *argv[] = {"mv", "-T", oldName[k], newName[k], NULL};
+    if((child_id = fork()) == 0)
+        execv("/usr/bin/mv", argv);
+    while((wait(&status)) > 0);
+}
+```
+The format of this loop is not really different with the previous loop. The difference is only the parameter of the `argv`. The option `-T` is to move all the files inside the old folder to the new folder.
+
+All of the 3 folders need to be zipped and named as `Lopyu_Stevany.zip`.
+```c
+char *zipFolder[] = {"zip", "-r", "-m", "Lopyu_Stevany.zip", "Pyoto", "Musyik", "Fylm", NULL};
+execv("/usr/bin/zip", zipFolder);
+```
+The option `-r` is to make the zip command runs recursively and the option `-m` is to delete the folders that have been zipped. The next parameter is the name of the zipped file and the last 3 parameters is the folders name that are going to be zipped.
+
+Downloading, unzipping, and renaming the files 6 hours before Stevany's birthday can be programmed with `time.h` library.
+We need to declare it in our code first before using it.
+```c
+time_t t = time(NULL);
+struct tm tm = *localtime(&t);
+
+int day = tm.tm_mday;
+int month = tm.tm_mon + 1;
+int hour = tm.tm_hour;
+int minute = tm.tm_min;
+int second = tm.tm_sec;
+```
+Make an `if` condition preceeding download loop, unzip loop, and rename loop with the condition as 9 April 16.22 WIB because we need to do it 6 hours before her birthday and an `else if` condition for zipping process.
+```c
+if(day == 9 && month == 4 && hour == 16 && minute == 22 && second == 0)
+    download_loop;
+    unzip_loop;
+    rename_loop;
+
+else if(day == 9 && month == 4 && hour == 22 && minute == 22 && second == 0)
+    zip_process;
+```
+This program will run in the background because of daemon and it will execute when the time is exactly the same with the `if` and `else if` condition.
 
 ### **NUMBER 2**
 **A. Extract zip files and remove all unnecessary folder**</br>
