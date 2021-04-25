@@ -41,7 +41,7 @@ int status;
         execv("/usr/bin/unzip", linuxcommand); //execute unzip command
     }
    ```
-  To remove the unnecessary folder we just to unzip only the jpg files using ``*.jpg``
+  To remove the unnecessary folder we just to unzip only the jpg files using ``*.jpg``</br>
 **b. Make folder based on all the pets identity**</br>
 To save all the pets identity we use 
 ```c
