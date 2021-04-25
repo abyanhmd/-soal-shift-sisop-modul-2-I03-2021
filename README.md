@@ -94,8 +94,8 @@ while(wait(&status) > 0);
         }
     }
 ```
-</br>
-**C. Move all the pets file to their identity folders and rename it only the name.jpg**</br>
+
+</br>**C. Move all the pets file to their identity folders and rename it only the name.jpg**</br>
 First we want to save all the name, identity and the umur of all the pets. To find it we use this.
 ```c
 while(wait(&status) > 0);
@@ -151,8 +151,8 @@ int status;
                 execv("/bin/cp", linuxcommand);//execute copy command
             }
 ```
-</br>
-**D. Move all the pets into each of their pets identity if there is 2 pets in 1 jpg**</br>      
+
+</br>**D. Move all the pets into each of their pets identity if there is 2 pets in 1 jpg**</br>      
 Because we already save and move the first pet into its pets identity folder. Here we only need to find the nama, umur, and jenis for the second pet.
 ```c
 if(tmp[i] == '_') {
@@ -192,8 +192,8 @@ if(adadua == 1) {
                     execv("/bin/cp", linuxcommand); //execute copy command
                 }
 ```
-</br>
-**E. Write all the nama and umur into Keterangan.txt**</br>
+
+</br>**E. Write all the nama and umur into Keterangan.txt**</br>
 To write all the nama and umur we write it after moving the jpg files.</br>
 for the first pet we use.
 ```c
@@ -220,7 +220,7 @@ while(wait(&status) > 0);
                 fprintf(filep, "umur : %s tahun\n\n", name2_umur);
                 fclose(filep);
 ```
-**Additional**</br>
+</br>**Additional**</br>
 because we only move the jpg files using `cp` command so we need to delete all the jpg files that not been moved to the folder so we use 
 ```c
 while(wait(&status) > 0);
