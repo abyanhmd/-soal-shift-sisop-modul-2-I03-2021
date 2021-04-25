@@ -321,6 +321,7 @@ char *argv[] = {"mkdir", tanggalD, NULL};
 execv("/bin/mkdir", argv);
 }
 ```
+
 Then to make the file creation executed everytime, we use the `while(1)` to make the `Direct` function running every 40 second, the followed by `sleep(40)`
  
  ```c
@@ -360,6 +361,7 @@ sleep(5);
 }
 }
  ```
+
 In the `Download` function, break the function into two process. The first one is for the timestamp using `strftime`. Then set `path` for the images to be filled into the file directory. Before that set the size with `SIZE = (((int)t)%1000)+50`. to get the images we use `sprintf(url, "https://picsum.photos/%d/%d", SIZE, SIZE);`. For the second process we execv the `url` using `wget` and also set the `kill` process
 
 ```c
@@ -391,12 +393,132 @@ char *argv[] = {"wget",url , "-qO", path, NULL};
 }
 ```
 
-**C. not understanding yet**</br>
-**D. not understanding yet**</br>
-**E. not understanding yet** </br>
+**C. The directory has been filled with 10 images, create a file "status.txt", which contains the message "Download Success" which is encrypted with the Caesar Cipher technique and with shift 5. After the file is created, zip the directory file and delete the directory leaving a zip file**</br>
 
+First we continue the previous `Direct` function. After the download process ends, encrypt the download success message that will be done by `Chiper` function. Make `status.txt` by using `TXT` function. To zip it all the process that had been done, call `ZIP` function. Finally kill the process.
+In `Cipher`, every message slide every `key` that available. If the word exceeded `z`, it will slide from `a`.
+In `TXT` function, make `path` that filled with with file directory and `status.txt` that already been encrypted.
+In `ZIP` function, zip all the progress. To erase the zipped file use `-m` argument.
+
+```c
+else if(anak_id3 > 0 && wait(&status) > 0)
+{
+char message[20] = {"Download Success"};
+int key = 5;
+Cipher(message, key);
+TXT(message, tanggalD);
+ZIP(tanggalD);
+}
+kill(getpid(),SIGTERM);
+```
+
+```c
+void Cipher(char message[], int key)
+{
+char ch;
+int i;
+for(i = 0; message[i] != '\0'; ++i){
+ch = message[i];
  
+if(ch >= 'a' && ch <= 'z'){
+ch = ch + key;
+if(ch > 'z'){
+ch = ch - 'z' + 'a' - 1;
+}
  
+message[i] = ch;
+}
+else if(ch >= 'A' && ch <= 'Z'){
+ch = ch + key;
+if(ch > 'Z'){
+ch = ch - 'Z' + 'A' - 1;
+}
+ message[i] = ch;
+```
+
+```c
+void TXT(char message[], char tanggalD[])
+{
+FILE *file1;
+char path [150] = {};
+
+strcat(path, tanggalD);
+  strcat(path,"/");
+  strcat(path, "status.txt");
+  file1 = fopen(path, "w");
+  fputs(message, file1);
+  fclose(file1);
  
+}
+```
+
+```c
+void ZIP(char tanggalD[])
+{
+char *argv[] = {"zip", "-r" , "-m", tanggalD, tanggalD, NULL};
+  execv("/bin/zip", argv);
+}
+```
+
+**D and E. When the program is run, the program will generate a killer program in the form of an executable bash program, and after the killer program is run, the killer program will delete itself. If the program is run using the -z argument, if the killer program is executed, all processes that are being carried out by the program will stop immediately. However, if the program is run using the -x argument, the program will stop but will complete the process in the directory that was created**</br>
+
+In `Killer` function, split the process into two. The child will make `killer.sh` file. If `-z` is the argument, the `killer.sh` will fill in a command to kill all the process that being run with `io3`. After killing, delete the `killer.sh` with `rm` command. If its `-x` argument, it will kill the child process. 
+In parent of `Killer` function, make the `killer.sh` could be run by using `chmod` with `+x` argument.
+
+```c
+void Killer(int argN, char **argV, int pid)
+{
+pid_t anak_id;
+anak_id = fork();
+int status;
+if(anak_id < 0)
+exit(EXIT_FAILURE);
+if (anak_id == 0)
+{
+FILE *file1 = fopen("killer.sh", "w");
+if (argN == 2 && strcmp(argV[1], "-z") == 0)
+{
+fprintf(file1, "#!/bin/bash\nkillall -9 io3\nrm \"$0\"");
+}
+else if (argN == 2 && strcmp(argV[1], "-x") == 0)
+{
+fprintf(file1, "#!/bin/bash\nkill %d\nrm \"$0\"", pid);
+}
+fclose(file1);
+}
+else if(anak_id > 0 && wait(&status) > 0)
+{
+char *argv[] = {"chmod", "+x", "killer.sh", NULL};
+        execv("/bin/chmod", argv);
+}
+```
+
+In the main, call `Killer` function by passing the the `PID` from the main child.
+
+```c
+int main(int argN, char **argV) {
+pid_t pid, sid;        
+
+pid = fork();
+
+  if (pid < 0) {
+    exit(EXIT_FAILURE);
+  }
+
+  if (pid > 0) {
+    exit(EXIT_SUCCESS);
+  }
+
+  umask(0);
+
+  sid = setsid();
+  if (sid < 0) {
+  exit(EXIT_FAILURE);
+  }
+  close(STDIN_FILENO);
+  close(STDOUT_FILENO);
+  close(STDERR_FILENO);
+  Killer(argN, argV, (int) getpid()+1); 
+ ```
 	
 
