@@ -152,7 +152,7 @@ int status;
             }
 ```
 
-</br>**D. Move all the pets into each of their pets identity if there is 2 pets in 1 jpg**</br>      
+</br>**D. Move all the pets into each of their pets identity if there is 2 pets in 1 jpg**   
 Because we already save and move the first pet into its pets identity folder. Here we only need to find the nama, umur, and jenis for the second pet.
 ```c
 if(tmp[i] == '_') {
