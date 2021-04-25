@@ -27,7 +27,7 @@ execl("/usr/bin/mv", "mv", "MUSIK", "Musyik", NULL);
 The old name is MUSIK and the new name is Musyik.</br>
 
 ### **NUMBER 2**
-**a. Extract zip files and remove all unnecessary folder**</br>
+**A. Extract zip files and remove all unnecessary folder**</br>
 First we need to have directory "/home/[user]/modul2/petshop" then we have to unzip the pets.zip then remove all unnecessary folder.
 ```c
 int status;
@@ -42,7 +42,8 @@ int status;
     }
    ```
   To remove the unnecessary folder we just to unzip only the jpg files using ``*.jpg``</br>
-**b. Make folder based on all the pets identity**</br>
+  
+**B. Make folder based on all the pets identity**</br>
 To save all the pets identity we use 
 ```c
 while(wait(&status) > 0);
@@ -93,7 +94,7 @@ while(wait(&status) > 0);
         }
     }
 ```
-**c. Move all the pets file to their identity folders and rename it only the name.jpg**</br>
+**C. Move all the pets file to their identity folders and rename it only the name.jpg**</br>
 First we want to save all the name, identity and the umur of all the pets. To find it we use this.
 ```c
 while(wait(&status) > 0);
@@ -149,7 +150,7 @@ int status;
                 execv("/bin/cp", linuxcommand);//execute copy command
             }
 ```
-**d. Move all the pets into each of their pets identity if there is 2 pets in 1 jpg**</br>      
+**D. Move all the pets into each of their pets identity if there is 2 pets in 1 jpg**</br>      
 Because we already save and move the first pet into its pets identity folder. Here we only need to find the nama, umur, and jenis for the second pet.
 ```c
 if(tmp[i] == '_') {
