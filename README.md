@@ -246,7 +246,7 @@ while(wait(&status) > 0);
 **A. we need to make a file directory every 40 seconds and make the name of the file is the same as the timestamp**</br>
 
 
-First we make the execv of both the timestamp and the mkdir for the file directory creation
+First we make the execv of both the timestamp and the `mkdir` for the file directory creation. To use the timestamp, we use `strftime` function and `localtime` as the time given.
  ```c
 int Direct()
 {
@@ -267,7 +267,7 @@ char *argv[] = {"mkdir", tanggalD, NULL};
 execv("/bin/mkdir", argv);
 }
 ```
-Then to make the file creation executed everytime, we use the while(1) to make the Direct function running every 40 second, the followed by sleep(40)
+Then to make the file creation executed everytime, we use the `while(1)` to make the `Direct` function running every 40 second, the followed by `sleep(40)`
  
  ```c
  while(1)
