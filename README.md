@@ -246,42 +246,39 @@ while(wait(&status) > 0);
 **A. we need to make a file directory every 40 seconds and make the name of the file is the same as the timestamp**</br>
 
 
-For now, our group only manage to make the file in the directory using the exec.c from the modul 2 skeleton. And to name the file, first we need to struct the function, then we set the a place for the time and set the time count using ``localtime``. we use function ``strftime`` to change the date an time format. This solution isn’t really finished because we haven’t solve of how the program running for every 40 seconds
+First we make the execv of both the timestamp and the mkdir for the file directory creation
  ```c
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <wait.h>
-#include <time.h>
-
-
-int main(int argc, char *argv[]) {
+int Direct()
+{
+char tanggalD[150];
+int status;
+time_t t;
+pid_t anak_id;
+anak_id = fork();
+t = time(NULL);
  
-  pid_t child_id;
-  int status;
-  char stringfile[40];
-  struct tm *timestamp;
-
-child_id = fork();
-time_t now = time(NULL);
-timestamp = localtime(&now);
-
-strftime(stringfile, sizeof(stringfile), "%Y-%m-%d_%H:%M:%S", timestamp);
-
-  if (child_id < 0) {
-    exit(EXIT_FAILURE); // Jika gagal membuat proses baru, program akan berhenti
-  }
-
-  if (child_id == 0) {
-    // this is child
-   
-    char *argv[] = {"mkdir", stringfile, NULL};
-    execv("/bin/mkdir", argv);
-    sleep (40);
-  }
+strftime(tanggalD, sizeof(tanggalD), "%Y-%m-%d_%H:%M:%S", localtime(&t));
+if(anak_id < 0)
+exit(EXIT_FAILURE);
+if (anak_id == 0)
+{
+ 
+char *argv[] = {"mkdir", tanggalD, NULL};
+execv("/bin/mkdir", argv);
+}
 ```
-
+Then to make the file creation executed everytime, we use the while(1) to make the Direct function running every 40 second, the followed by sleep(40)
+ 
+ ```c
+ while(1)
+{
+int a = Direct();
+if (a == 10)
+{
+sleep(40);
+}
+}
+ ```
 **B. not understanding yet**</br>
 **C. not understanding yet**</br>
 **D. not understanding yet**</br>
