@@ -300,7 +300,6 @@ while(wait(&status) > 0);
 ### **Number 3**
 **A. we need to make a file directory every 40 seconds and make the name of the file is the same as the timestamp**</br>
 
-
 First we make the execv of both the timestamp and the `mkdir` for the file directory creation. To use the timestamp, we use `strftime` function and `localtime` as the time given.
  ```c
 int Direct()
@@ -334,7 +333,64 @@ sleep(40);
 }
 }
  ```
-**B. not understanding yet**</br>
+
+**B. For all the directory that has been created, they will download 10 images from "https://picsum.photos/", where each image is downloaded every 5 seconds. Then the file named will be after the timestamp and given the size (n% 1000) + 50 pixels where n is Unix Epoch seconds**</br>
+
+First, use the child process of the previous program. After that iterate ten times in the child and call `Download` function and pass the file name. Then, use `sleep(5)` to make the program run for every 5 seconds.
+
+```c
+if (anak_id2 == 0)
+{
+pid_t anak_id3;
+anak_id3 = fork();
+if(anak_id3 < 0)
+exit(EXIT_FAILURE);
+if (anak_id3 == 0)
+{
+
+  short gambar = 1;
+while(gambar <= 10)
+{
+int z = Download(tanggalD);
+if(z == 7)
+{
+gambar++;
+sleep(5);
+}
+}
+}
+ ```
+In the `Download` function, break the function into two process. The first one is for the timestamp using `strftime`. Then set `path` for the images to be filled into the file directory. Before that set the size with `SIZE = (((int)t)%1000)+50`. to get the images we use `sprintf(url, "https://picsum.photos/%d/%d", SIZE, SIZE);`. For the second process we execv the `url` using `wget` and also set the `kill` process
+
+```c
+int Download(char tanggalD[])
+{
+
+char temp[150];
+  char path[150]={};
+  char url[150]={};
+pid_t anak_id;
+anak_id = fork();
+time_t t;
+t = time(NULL);
+strftime(temp, sizeof(temp), "%Y-%m-%d_%H:%M:%S", localtime(&t));
+strcat(path, tanggalD);
+  strcat(path,"/");
+  strcat(path, temp);
+ 
+  int SIZE = (((int)t)%1000)+50;
+  sprintf(url, "https://picsum.photos/%d/%d", SIZE, SIZE);
+if(anak_id < 0)
+exit(EXIT_FAILURE);
+if (anak_id == 0)
+{
+
+char *argv[] = {"wget",url , "-qO", path, NULL};
+  execv("/bin/wget", argv);
+  kill(getpid(),SIGTERM);
+}
+```
+
 **C. not understanding yet**</br>
 **D. not understanding yet**</br>
 **E. not understanding yet** </br>
