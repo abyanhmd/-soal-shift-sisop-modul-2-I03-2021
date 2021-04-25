@@ -93,8 +93,7 @@ while(wait(&status) > 0);
             execv("/bin/mkdir", linuxcommand); //execute mkdir command
         }
     }
-```
-
+```</br>
 **C. Move all the pets file to their identity folders and rename it only the name.jpg**</br>
 First we want to save all the name, identity and the umur of all the pets. To find it we use this.
 ```c
@@ -150,7 +149,7 @@ int status;
                 char *linuxcommand[] = {"cp", "-r", asal, tujuan, NULL}; //copy all pets base on the identity
                 execv("/bin/cp", linuxcommand);//execute copy command
             }
-```
+```</br>
 
 **D. Move all the pets into each of their pets identity if there is 2 pets in 1 jpg**</br>      
 Because we already save and move the first pet into its pets identity folder. Here we only need to find the nama, umur, and jenis for the second pet.
@@ -191,7 +190,7 @@ if(adadua == 1) {
                     char *linuxcommand[] = {"cp", "-r", asal, tujuan, NULL}; //copy all jpg base on the pets identity
                     execv("/bin/cp", linuxcommand); //execute copy command
                 }
-```
+```</br>
 
 **E. Write all the nama and umur into Keterangan.txt**</br>
 To write all the nama and umur we write it after moving the jpg files.</br>
